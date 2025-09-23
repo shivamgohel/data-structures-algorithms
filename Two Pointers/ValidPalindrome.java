@@ -1,5 +1,5 @@
 // https://leetcode.com/problems/valid-palindrome/description/
-//import java.util.*;
+// import java.util.*;
 
 class ValidPalindrome
 {
@@ -70,6 +70,42 @@ class ValidPalindrome
 
             left++;
             right--;            
+        }
+
+        return true;
+    }
+
+/*
+ * Optimized2: Clean-then-compare approach but space complexity is O(n).
+ * 
+ * - First, removes all non-alphanumeric characters using regex.
+ * - Converts the cleaned string to lowercase.
+ * - Then, uses the two-pointer technique to check if it's a palindrome.
+ *
+ * This approach is a hybrid: it's more readable and concise than manually
+ * checking character types, while still being fairly efficient.
+ * 
+ * Time Complexity: O(n)
+ * - replaceAll() and toLowerCase() each scan the string once.
+ * - The two-pointer check is another pass.
+ * - So overall still linear.
+ * 
+ * Space Complexity: O(n)
+ * - Because a new cleaned string is created before comparison.
+*/
+    private static boolean validPalindromeOptimized2(String s) {
+        s = s.replaceAll("[^a-zA-Z0-9]", "");
+        s = s.toLowerCase();
+        
+        int left = 0;
+        int right = s.length() - 1;
+
+        while(left < right){
+            if(s.charAt(left) != s.charAt(right))
+                return false;
+            
+            left++;
+            right--;
         }
 
         return true;

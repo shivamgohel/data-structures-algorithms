@@ -102,7 +102,7 @@ class LongestRepeatingCharacterReplacement
                     maximum_frequency = Math.max(maximum_frequency,freq);
             }
 
-            maximum_length = Math.max(maximum_length, window_length);
+            maximum_length = Math.max(maximum_length, right - left + 1); // Must recalculate after window possibly shrinks
         }
 
         return maximum_length;
@@ -144,7 +144,7 @@ class LongestRepeatingCharacterReplacement
                 left++;
             }
 
-            maximum_length = Math.max(maximum_length, window_length);
+            maximum_length = Math.max(maximum_length, right - left + 1);
         }
 
         return maximum_length;
@@ -179,7 +179,7 @@ class LongestRepeatingCharacterReplacement
                 left++;
             }
 
-            maximum_length = Math.max(maximum_length, window_length);
+            maximum_length = Math.max(maximum_length, right - left + 1);
         }
 
         return maximum_length;

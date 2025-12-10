@@ -20,6 +20,9 @@ class LongestConsecutiveSequence
         
         // Optimized approach using a HashSet (One pass)
         System.out.println(longestConsecutiveSequenceOptimized(nums));
+
+        // Follow-up (find the actual sequence as well as the maximum Length);
+        longestConsecutiveSequenceFollowUp(nums);
     }
 
     /*
@@ -119,5 +122,74 @@ class LongestConsecutiveSequence
         }
 
         return res;    
+    }
+
+    /*
+     * Approach 4: Follow-Up - Print the Actual Longest Consecutive Sequence
+     * Time Complexity: O(n) -> Only a single pass through the array is required.
+     * Space Complexity: O(n) -> We use a HashSet to store the elements.
+     *
+     * - Insert all elements into a HashSet for O(1) lookups.
+     * - For each element, check if it's the start of a consecutive sequence (num - 1 should not exist).
+     * - If it is, expand the sequence by checking how long it continues using (num + 1), (num + 2), etc.
+     * - Track the maximum streak length and the starting number of that streak.
+     * - Finally, construct the actual sequence using start + 0, start + 1, ..., start + (length - 1),
+     *   by looping from 0 to (maxLength - 1) and assigning each value to an array:
+     *     res[i] = startOfMaxSeq + i;
+     *   This builds the sorted sequence without sorting the original array.
+    */
+    private static void longestConsecutiveSequenceFollowUp(int[] nums) {
+        if(nums.length == 0)
+            return;
+        
+        int maxLength = 1;
+        Set<Integer> store = new HashSet<>();
+        
+        for(int num : nums){
+            store.add(num);
+        }
+
+        int startOfMaxSeq = 0;
+        for(int num : store){
+            if(store.contains(num - 1)){
+                continue;
+            }
+            
+            int streak = 1;
+            while(store.contains(num + streak)){
+                streak++;
+            }
+
+            if(streak > maxLength){
+                maxLength = streak;
+                startOfMaxSeq = num;
+            }
+        }
+
+        int[] res = new int[maxLength];
+        for(int i=0; i<maxLength; i++){
+            res[i] = startOfMaxSeq + i;
+        }
+        
+        /*
+          --> if print directly then:
+          
+          for(int i=0; i<maxLength; i++){
+            System.out.Print((startOfMaxSeq + i) + " ");
+          }
+
+          OR
+
+          for(int i=startOfMaxSeq; i<startOfMaxSeq + maxLength; i++){
+            System.out.Print(i + " ");
+          }
+
+         */
+
+        System.out.println("The Maximum Length is: " + maxLength);
+        for(int i=0;i<res.length;i++)
+        {
+            System.out.print(res[i] + " ");
+        }
     }
 }

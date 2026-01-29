@@ -20,9 +20,13 @@ class MaximumSubarray
         System.out.println(maximumSubarrayBetter(nums));
 
         // Optimized approach (Kadane’s Algorithm): O(n) time, O(1) space
-        System.out.println(maximumSubarrayOptimized(nums));
-        
-       
+        System.out.println(maximumSubarrayOptimized1(nums));
+
+        // Optimized approach (Kadane’s Algorithm  { Handles negative numbers elegantly }): O(n) time, O(1) space
+        System.out.println(maximumSubarrayOptimized2(nums));
+
+
+
         // Follow-up: Return the actual subarray with maximum sum
         System.out.println(Arrays.toString(maximumSubarrayFollowUp(nums)));
 
@@ -113,7 +117,7 @@ class MaximumSubarray
      Time Complexity: O(n) — single pass.
      Space Complexity: O(1) — no extra space.
     */
-    private static int maximumSubarrayOptimized(int[] nums) {
+    private static int maximumSubarrayOptimized1(int[] nums) {
         if(nums.length == 0)
             return -1;
         
@@ -128,6 +132,60 @@ class MaximumSubarray
         }    
 
         return maximumSum;
+    }
+
+    /*
+    Optimized Approach 2: Kadane's Algorithm (currSum = max(currSum + num, num))
+    ---------------------------------------------------------------------------
+    Why this is better than Optimized Approach 1 :
+
+    1. Handles negative numbers elegantly:
+       - At each step, we choose between:
+           a) Extending the previous subarray sum: currSum + num
+           b) Starting a new subarray from the current element: num
+       - This ensures that when the previous sum is negative, we automatically "discard" it
+         and start fresh from the current number.
+       - Unlike approach1 (simple reset to 0), this also works correctly if
+         all numbers are negative (it picks the largest single number).
+
+    2. Simpler logic:
+       - No need to check if currSum < 0 and reset separately.
+       - Single line: currSum = Math.max(currSum + num, num)
+       - maxSum = Math.max(maxSum, currSum) keeps track of the largest sum seen.
+
+    3. Time and Space efficiency:
+       - Time Complexity: O(n) — single pass through the array.
+       - Space Complexity: O(1) — no extra array or storage required.
+
+    Example Dry Run (nums = [2, -3, 4, -2, 2, 1, -1, 4]):
+    ---------------------------------------------------------------------------
+    Step-by-step currSum and maxSum updates:
+    Index 0: num=2    → currSum = max(0+2, 2) = 2   → maxSum = 2
+    Index 1: num=-3   → currSum = max(2-3, -3) = -1 → maxSum = 2
+    Index 2: num=4    → currSum = max(-1+4, 4) = 4  → maxSum = 4
+    Index 3: num=-2   → currSum = max(4-2, -2) = 2  → maxSum = 4
+    Index 4: num=2    → currSum = max(2+2, 2) = 4   → maxSum = 4
+    Index 5: num=1    → currSum = max(4+1, 1) = 5   → maxSum = 5
+    Index 6: num=-1   → currSum = max(5-1, -1) = 4  → maxSum = 5
+    Index 7: num=4    → currSum = max(4+4, 4) = 8   → maxSum = 8
+
+    Final maximum sum = 8
+
+    Key Advantage:
+    - Automatically discards negative contributions.
+    - Correctly handles arrays with all negative numbers.
+    - More concise and robust than resetting currSum manually.
+    */
+    private static int maximumSubarrayOptimized2(int[] nums){
+        int currSum = 0;
+        int maxSum = Integer.MIN_VALUE;
+
+        for(int num : nums){
+            currSum = Math.max(currSum+num, num);
+            maxSum = Math.max(maxSum, currSum);
+        }
+
+        return maxSum;
     }
 
     /*
